@@ -12,11 +12,11 @@
 &csi {
 	status = "okay";
 };
-
+/*
 &ov5640 {
 	status = "okay";
 };
-
+*/
 &sim2 {
 	status = "disabled";
 };

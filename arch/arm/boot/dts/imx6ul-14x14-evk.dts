@@ -272,7 +272,7 @@
 	pinctrl-assert-gpios = <&gpio4 23 GPIO_ACTIVE_LOW>;
 	port = <1>;
 	sven_low_active;
-	status = "okay";
+	status = "disable";
 };
 
 &tsc {
@@ -344,7 +344,6 @@
 	cd-gpios = <&gpio1 19 0>;
 	keep-power-in-suspend;
 	enable-sdio-wakeup;
-	max-frequency = <20000000>;
 	vmmc-supply = <&reg_sd1_vmmc>;
 	status = "okay";
 };
@@ -442,6 +441,39 @@
 	};
 };
 */
+
+
+&ecspi1 {
+        fsl,spi-num-chipselects = <1>;
+        cs-gpios = <&gpio4 26 0>;
+        pinctrl-names = "default";
+        pinctrl-0 = <&pinctrl_ecspi1>;
+        status = "okay";
+
+        flash: m25p80@0 {
+                compatible = "sst,sst25vf016b";
+                spi-max-frequency = <20000000>;
+                reg = <0>;
+        };
+};
+
+
+&ecspi2 {
+        fsl,spi-num-chipselects = <1>;
+        cs-gpios = <&gpio4 22 0>;
+        pinctrl-names = "default";
+        pinctrl-0 = <&pinctrl_ecspi2>;
+        status = "okay";
+
+        flash1: m25p80@0 {
+                compatible = "sst,sst25vf016b";
+                spi-max-frequency = <20000000>;
+                reg = <0>;
+        };
+};
+
+
+
 &iomuxc {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_hog_1>;
@@ -452,6 +484,8 @@
 				MX6UL_PAD_UART1_RTS_B__GPIO1_IO19	0x17059 /* SD1 CD */
 				MX6UL_PAD_GPIO1_IO05__USDHC1_VSELECT	0x17059 /* SD1 VSELECT */
 				MX6UL_PAD_GPIO1_IO09__GPIO1_IO09        0x17059 /* SD1 RESET */
+				MX6UL_PAD_CSI_DATA05__GPIO4_IO26        0x10759 /* SPI1 CS0 */
+				MX6UL_PAD_CSI_DATA01__GPIO4_IO22        0x10759  /*SPI2 CS0 */
 			>;
 		};
 
@@ -702,6 +736,26 @@
 				MX6UL_PAD_NAND_DQS__QSPI_A_SS0_B      0x70a1
 			>;
 		};
+
+
+		pinctrl_ecspi1: ecspigrp1 {
+                        fsl,pins = <
+				MX6UL_PAD_CSI_DATA04__ECSPI1_SCLK     0x70a1
+				MX6UL_PAD_CSI_DATA06__ECSPI1_MOSI     0x70a1								
+				MX6UL_PAD_CSI_DATA07__ECSPI1_MISO     0x70a1
+                        >;
+                };
+
+		
+		pinctrl_ecspi2: ecspigrp2 {
+                        fsl,pins = <
+                                MX6UL_PAD_CSI_DATA00__ECSPI2_SCLK     0x70a1
+				MX6UL_PAD_CSI_DATA02__ECSPI2_MOSI     0x70a1
+                                MX6UL_PAD_CSI_DATA03__ECSPI2_MISO     0x70a1
+                        >;
+                };
+
+		
 
 		pinctrl_sai2: sai2grp {
 			fsl,pins = <
